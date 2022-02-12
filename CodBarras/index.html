@@ -1,1 +1,62 @@
 
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Codigo de Barras</title>
+
+    <script src="https://cdn.jsdelivr.net/jsbarcode/3.6.0/JsBarcode.all.min.js"></script>
+    <script>
+        function GerarCódigoDeBarrasText1(elementoInput){
+            /*A função JsBarcode não aceita string vazia*/
+            if(!elementoInput.value){
+                elementoInput.value = 0;
+            }
+            JsBarcode('#codBarrasT1', elementoInput.value);
+        }
+        function GerarCódigoDeBarrasText2(elementoInput){
+            /*A função JsBarcode não aceita string vazia*/
+            if(!elementoInput.value){
+                elementoInput.value = 0;
+            }
+            JsBarcode('#codBarrasT2', elementoInput.value);
+        }
+        function GerarCódigoDeBarrasText3(elementoInput){
+            /*A função JsBarcode não aceita string vazia*/
+            if(!elementoInput.value){
+                elementoInput.value = 0;
+            }
+            JsBarcode('#codBarrasT3', elementoInput.value);
+        }
+    </script>
+</head>
+<body style="text-align: center;align-items: center;">
+    
+    <h1 style="text-align: center;">Gerador Basico de codigo de barras, formado CODE 128</h1>
+    <br><br>
+    <div>
+        <label>Texto 1: <br></label>
+        <input type="text" onblur="GerarCódigoDeBarrasText1(this)"/>
+    <button type="button">Gerar Código</button>
+</div>
+    <svg id="codBarrasT1"></svg>
+    <hr>
+    <hr>
+    <div>
+        <label>Texto 2: <br></label>
+        <input type="text" onblur="GerarCódigoDeBarrasText2(this)"/>
+        <button type="button">Gerar Código</button>
+    </div>
+    <svg id="codBarrasT2"></svg>
+    <hr><hr>
+    <div>
+        <label>Texto 3: <br></label>
+        <input type="text" onblur="GerarCódigoDeBarrasText3(this)"/>
+        <button type="button">Gerar Código</button>
+    </div>
+    <svg id="codBarrasT3"></svg>
+    <footer style="font: bold;font-size: large;">Feito por JB Silva</footer>
+</body>
+</html>
