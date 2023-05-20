@@ -1,62 +1,200 @@
-
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html>
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerador de Codigo de Barras</title>
+    <title>Gerador de Código de Barras</title>
+    <style>
+        /* Estilos CSS para centralizar os itens e impedir o ajuste automático */
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+            /* Padding igual à esquerda e à direita */
+        }
 
-    <script src="https://cdn.jsdelivr.net/jsbarcode/3.6.0/JsBarcode.all.min.js"></script>
+        h1 {
+            margin-top: 0;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto auto auto auto;
+            gap: 20px;
+            max-width: 370px;
+            width: 100%;
+        }
+
+        .barcode-image {
+            margin-top: 10px;
+            width: auto;
+            max-width: 500px;
+            height: auto;
+            max-height: 250px;
+        }
+
+        .print-button {
+            grid-row: 6 / 7;
+            grid-column: 1 / 3;
+            display: flex;
+            justify-content: center;
+        }
+
+        .cod-type {
+            grid-column: 1 / 3;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Estilos para a impressão dos códigos de barras */
+        @media print {
+            .barcode-image {
+                display: block;
+                margin: 20px auto;
+            }
+        }
+
+        footer {
+            font: bold;
+            font-size: medium;
+            color: #161030;
+            position: fixed;
+            bottom: 0;
+            text-align: center;
+            width: 100%;
+            padding: 20px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Gerador de Código de Barras</h1>
+    <div class="container">
+        <div style="grid-row: 3 / 4; grid-column: 1 / 2; display: flex; align-items: center;">
+            <input type="checkbox" id="hideText">
+            <label for="hideText">Ocultar texto do código de barras</label>
+        </div>
+
+        <div style="grid-row: 3 / 4; grid-column: 2 / 3;">
+            <button onclick="gerarCodigosDeBarras()">Gerar Códigos de Barras</button>
+        </div>
+
+        <div style="grid-row: 1 / 2; grid-column: 1 / 2;">
+            <label for="input1">Texto 1:</label>
+        </div>
+        <div style="grid-row: 2 / 3; grid-column: 1 / 2;">
+            <input type="text" id="input1">
+        </div>
+
+        <div style="grid-row: 1 / 2; grid-column: 2 / 3;">
+            <label for="input2">Texto 2:</label>
+        </div>
+        <div style="grid-row: 2 / 3; grid-column: 2 / 3;">
+            <input type="text" id="input2">
+        </div>
+
+        <div style="grid-row: 7 / 7; grid-column: 1 / 3; display: flex; justify-content: center;">
+            <img id="barcode1" class="barcode-image"
+                src="https://www.labeljoy.com/images/barcodes/code128_hidden_text.png"
+                alt="Código de Barras 1">
+        </div>
+
+        <div style="grid-row: 8 / 8; grid-column: 1 / 3; display: flex; justify-content: center;">
+            <img id="barcode2" class="barcode-image" src="https://www.promarking.com.br/wp-content/uploads/2021/05/Promarking-1.png" alt="Código de Barras 2">
+        </div>
+
+        <div style="grid-row: 4 / 5;" class="cod-type">
+            <label for="barcodeType">Tipo de código:</label>
+        </div>
+        <div style="grid-row: 5 / 6;" class="cod-type">
+            <select id="barcodeType">
+                <option value="code128">CODE 128</option>
+                <option value="qrcode">QR Code</option>
+                <!-- Adicione mais opções conforme necessário -->
+            </select>
+        </div>
+
+        <div class="print-button">
+            <button onclick="imprimirCodigosDeBarras()">Imprimir Códigos de Barras</button>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/bwip-js"></script>
     <script>
-        function GerarCódigoDeBarrasText1(elementoInput){
-            /*A função JsBarcode não aceita string vazia*/
-            if(!elementoInput.value){
-                elementoInput.value = 0;
-            }
-            JsBarcode('#codBarrasT1', elementoInput.value);
+        function gerarCodigosDeBarras() {
+            var input1Value = document.getElementById('input1').value;
+            var input2Value = document.getElementById('input2').value;
+            var hideText = document.getElementById('hideText').checked;
+            var barcodeType = document.getElementById('barcodeType').value;
+
+            var opts = {
+                bcid: barcodeType,
+                text: '',
+                includetext: !hideText,
+                textxalign: 'center'
+            };
+
+            opts.text = input1Value;
+            var canvas1 = document.createElement('canvas');
+            bwipjs.toCanvas(canvas1, opts);
+            document.getElementById('barcode1').src = canvas1.toDataURL();
+
+            opts.text = input2Value;
+            var canvas2 = document.createElement('canvas');
+            bwipjs.toCanvas(canvas2, opts);
+            document.getElementById('barcode2').src = canvas2.toDataURL();
         }
-        function GerarCódigoDeBarrasText2(elementoInput){
-            /*A função JsBarcode não aceita string vazia*/
-            if(!elementoInput.value){
-                elementoInput.value = 0;
-            }
-            JsBarcode('#codBarrasT2', elementoInput.value);
-        }
-        function GerarCódigoDeBarrasText3(elementoInput){
-            /*A função JsBarcode não aceita string vazia*/
-            if(!elementoInput.value){
-                elementoInput.value = 0;
-            }
-            JsBarcode('#codBarrasT3', elementoInput.value);
+
+        function imprimirCodigosDeBarras() {
+            var barcode1 = document.getElementById('barcode1');
+            var barcode2 = document.getElementById('barcode2');
+
+            var printWindow = window.open('', '_blank');
+            printWindow.document.open();
+            printWindow.document.write('<html><head><title>Impressão de Códigos de Barras</title>');
+            printWindow.document.write('<style>');
+            printWindow.document.write('@media print {');
+            printWindow.document.write('  body {');
+            printWindow.document.write('    display: flex;');
+            printWindow.document.write('    flex-direction: column;');
+            printWindow.document.write('    justify-content: center;');
+            printWindow.document.write('    align-items: center;');
+            printWindow.document.write('    min-height: 100vh;');
+            printWindow.document.write('    margin: 0;');
+            printWindow.document.write('    padding: 0;');
+            printWindow.document.write('  }');
+            printWindow.document.write('  .barcode-image {');
+            printWindow.document.write('    display: block;');
+            printWindow.document.write('    margin: 20px auto;');
+            printWindow.document.write('  }');
+            printWindow.document.write('  @page {');
+            printWindow.document.write('    size: auto;');
+            printWindow.document.write('    margin: 0;');
+            printWindow.document.write('  }');
+            printWindow.document.write('  @media print {');
+            printWindow.document.write('    @top-right {');
+            printWindow.document.write('      content: none;');
+            printWindow.document.write('    }');
+            printWindow.document.write('  }');
+            printWindow.document.write('}');
+            printWindow.document.write('</style>');
+            printWindow.document.write('</head><body>');
+            printWindow.document.write('<img src="' + barcode1.src + '" alt="Código de Barras 1"><br><br>');
+            printWindow.document.write('<img src="' + barcode2.src + '" alt="Código de Barras 2">');
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+
+            printWindow.print();
         }
     </script>
-</head>
-<body style="text-align: center;align-items: center;">
-    
-    <h1 style="text-align: center;">Gerador Basico de codigo de barras, formado CODE 128</h1>
-    <br><br>
-    <div>
-        <label>Texto 1: <br></label>
-        <input type="text" onblur="GerarCódigoDeBarrasText1(this)"/>
-    <button type="button">Gerar Código</button>
-</div>
-    <svg id="codBarrasT1"></svg>
-    <hr>
-    <hr>
-    <div>
-        <label>Texto 2: <br></label>
-        <input type="text" onblur="GerarCódigoDeBarrasText2(this)"/>
-        <button type="button">Gerar Código</button>
-    </div>
-    <svg id="codBarrasT2"></svg>
-    <hr><hr>
-    <div>
-        <label>Texto 3: <br></label>
-        <input type="text" onblur="GerarCódigoDeBarrasText3(this)"/>
-        <button type="button">Gerar Código</button>
-    </div>
-    <svg id="codBarrasT3"></svg>
-    <footer style="font: bold;font-size: large;">Feito por JB Silva</footer>
 </body>
+<footer style="font: bold;font-size: large;">Feito por JB Silva</footer>
+
 </html>
